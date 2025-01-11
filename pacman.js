@@ -17,16 +17,20 @@ const pacman = {
 
 // Duvarlar
 const walls = [
-    { x: 200, y: 150, width: 400, height: 20 },
-    { x: 100, y: 300, width: 20, height: 200 },
-    { x: 300, y: 400, width: 300, height: 20 }
+    { x: 50, y: 50, width: 300, height: 20 },
+    { x: 50, y: 50, width: 20, height: 300 },
+    { x: 330, y: 50, width: 20, height: 300 },
+    { x: 50, y: 330, width: 300, height: 20 },
+    // Orijinal Pacman duvarlarını buraya ekleyin
 ];
 
 // Yiyecekler
 const foods = [
     { x: 100, y: 100, radius: 5 },
-    { x: 400, y: 200, radius: 5 },
-    { x: 600, y: 500, radius: 5 }
+    { x: 150, y: 100, radius: 5 },
+    { x: 200, y: 100, radius: 5 },
+    { x: 250, y: 100, radius: 5 },
+    // Orijinal Pacman yiyeceklerini buraya ekleyin
 ];
 
 // Duvarları çizme
