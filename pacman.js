@@ -1,55 +1,118 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// Pacman görüntüsü
+const pacmanImage = new Image();
+pacmanImage.src = 'pacman.png';
+
+// Pacman nesnesi
 const pacman = {
     x: 50,
     y: 50,
-    radius: 15,
+    width: 30,
+    height: 30,
     speed: 5,
     direction: 'right'
 };
 
-function drawPacman() {
-    ctx.fillStyle = 'yellow';
-    ctx.beginPath();
-    ctx.arc(pacman.x, pacman.y, pacman.radius, 0.2 * Math.PI, 1.8 * Math.PI);
-    ctx.lineTo(pacman.x, pacman.y);
-    ctx.fill();
+// Duvarlar
+const walls = [
+    { x: 200, y: 150, width: 400, height: 20 },
+    { x: 100, y: 300, width: 20, height: 200 },
+    { x: 300, y: 400, width: 300, height: 20 }
+];
+
+// Yiyecekler
+const foods = [
+    { x: 100, y: 100, radius: 5 },
+    { x: 400, y: 200, radius: 5 },
+    { x: 600, y: 500, radius: 5 }
+];
+
+// Duvarları çizme
+function drawWalls() {
+    ctx.fillStyle = 'blue';
+    walls.forEach(wall => {
+        ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+    });
 }
 
+// Yiyecekleri çizme
+function drawFoods() {
+    ctx.fillStyle = 'white';
+    foods.forEach(food => {
+        ctx.beginPath();
+        ctx.arc(food.x, food.y, food.radius, 0, 2 * Math.PI);
+        ctx.fill();
+    });
+}
+
+// Pacman'i çizme
+function drawPacman() {
+    ctx.drawImage(pacmanImage, pacman.x, pacman.y, pacman.width, pacman.height);
+}
+
+// Pacman'i güncelleme
 function updatePacman() {
+    let nextX = pacman.x;
+    let nextY = pacman.y;
+
     switch (pacman.direction) {
         case 'right':
-            pacman.x += pacman.speed;
+            nextX += pacman.speed;
             break;
         case 'left':
-            pacman.x -= pacman.speed;
+            nextX -= pacman.speed;
             break;
         case 'up':
-            pacman.y -= pacman.speed;
+            nextY -= pacman.speed;
             break;
         case 'down':
-            pacman.y += pacman.speed;
+            nextY += pacman.speed;
             break;
     }
 
-    if (pacman.x + pacman.radius > canvas.width) pacman.x = pacman.radius;
-    if (pacman.x - pacman.radius < 0) pacman.x = canvas.width - pacman.radius;
-    if (pacman.y + pacman.radius > canvas.height) pacman.y = pacman.radius;
-    if (pacman.y - pacman.radius < 0) pacman.y = canvas.height - pacman.radius;
+    // Duvar çarpışma kontrolü
+    const colliding = walls.some(wall =>
+        nextX < wall.x + wall.width &&
+        nextX + pacman.width > wall.x &&
+        nextY < wall.y + wall.height &&
+        nextY + pacman.height > wall.y
+    );
+
+    if (!colliding) {
+        pacman.x = nextX;
+        pacman.y = nextY;
+    }
+
+    // Yiyecek toplama kontrolü
+    foods.forEach((food, index) => {
+        const dx = pacman.x + pacman.width / 2 - food.x;
+        const dy = pacman.y + pacman.height / 2 - food.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < pacman.width / 2 + food.radius) {
+            foods.splice(index, 1); // Yiyeceği kaldır
+        }
+    });
 }
 
+// Tuval temizleme
 function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+// Oyun döngüsü
 function gameLoop() {
     clearCanvas();
+    drawWalls();
+    drawFoods();
     drawPacman();
     updatePacman();
     requestAnimationFrame(gameLoop);
 }
 
+// Klavye kontrolleri
 document.addEventListener('keydown', function (event) {
     if (event.key === 'ArrowRight') pacman.direction = 'right';
     if (event.key === 'ArrowLeft') pacman.direction = 'left';
@@ -57,4 +120,5 @@ document.addEventListener('keydown', function (event) {
     if (event.key === 'ArrowDown') pacman.direction = 'down';
 });
 
-gameLoop();
+// Oyun başlatma
+pacmanImage.onload = gameLoop;
