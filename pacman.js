@@ -1,23 +1,3 @@
-Skip to content
- 
-Search Gists
-Search...
-All gists
-Back to GitHub
-@onnayokheng
-onnayokheng/index.html
-Created 6 years ago • Report abuse
-Code
-Revisions
-1
-Stars
-14
-Forks
-14
-Clone this repository at &lt;script src=&quot;https://gist.github.com/onnayokheng/fd2ca1a74d9d427ff7461745afccac88.js&quot;&gt;&lt;/script&gt;
-<script src="https://gist.github.com/onnayokheng/fd2ca1a74d9d427ff7461745afccac88.js"></script>
-HTML Code Game Pacman
-index.html
 <!DOCTYPE html>
 <html>
 <head>
@@ -1349,3 +1329,8 @@ $(function(){
       "(firefox 3.6+, Chrome 4+, Opera 10+ and Safari 4+)</small>";
   }
 });
+
+
+	</script>
+</body>
+</html>
